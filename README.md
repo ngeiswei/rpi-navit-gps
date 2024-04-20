@@ -15,7 +15,6 @@ Description of my personal attempt to build a Raspberry Pi Navit GPS.
 
 - [rpi-imager](https://www.raspberrypi.com/software/)
 - [Navit](https://www.navit-project.org/)
-- [Evemu](https://www.freedesktop.org/wiki/Evemu/)
 
 ## Assemble Hardware
 
