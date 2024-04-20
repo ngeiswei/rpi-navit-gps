@@ -76,8 +76,8 @@ sudo apt install libpng-dev libgtk2.0-dev librsvg2-bin \
 
 #### Build Navit
 
-Do not use the latest revision from the git repository, as it might be
-broken.  Instead, fetch the latest release (0.5.6 as of April 2024)
+Do not use the latest revision from the git repository, it might be
+broken.  Instead, fetch the latest release, 0.5.6 as of April 2024
 
 ```
 wget https://github.com/navit-gps/navit/archive/refs/tags/v0.5.6.tar.gz
