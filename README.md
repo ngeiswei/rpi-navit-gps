@@ -105,7 +105,7 @@ cd navit-build
 and compile
 
 ```
-cmake ~/navit
+cmake ~/navit-0.5.6
 make
 ```
 
