@@ -47,9 +47,8 @@ and connect the touch screen via the Display Port.
 
 ### Install Navit
 
-As of March 2024, the deb package of Navit provided by default,
-`navit/oldstable 0.5.5+dfsg.1-2 armhf`, is not good enough, we must
-therefore compile it from source.
+Debian packages of Navit are sometimes deficient, I recommend you
+compile it from source.
 
 #### Install Prerequisites
 
@@ -64,33 +63,40 @@ sudo apt install git cmake g++ gettext protobuf-c-compiler
 2. GPS software
 
 ```
-sudo gpsd gpsd-clients
+sudo apt install gpsd gpsd-clients
 ```
 
 3. Additional libraries
 
 ```
-sudo apt install libpng12-dev libgtk2.0-dev librsvg2-bin \
-                 libgps-dev libdbus-glib-1-dev freeglut3-dev libxft-dev \
-                 libglib2.0-dev libfreeimage-dev libprotobuf-c-dev zlib1g-dev \
+sudo apt install libpng-dev libgtk2.0-dev librsvg2-bin \
+                 libgps-dev libdbus-glib-1-dev freeglut3-dev \
+                 libfreeimage-dev libprotobuf-c-dev zlib1g-dev \
 ```
 
 #### Build Navit
 
-Get Navit source code
+Do not use the latest revision from the git repository, as it might be
+broken.  Instead, fetch the latest release (0.5.6 as of April 2024)
 
 ```
-git clone https://github.com/navit-gps/navit.git
+wget https://github.com/navit-gps/navit/archive/refs/tags/v0.5.6.tar.gz
 ```
 
-It will create a `navit` folder, do not enter that folder just yet,
-create a `navit-build` folder next to it
+Unpack
+
+```
+tar xvf v0.5.6.tar.gz
+```
+
+It should create a `navit-0.5.6` folder, do not enter that folder,
+rather create a `navit-build` folder next to it
 
 ```
 mkdir navit-build
 ```
 
-Enter that folder
+Enter this folder
 
 ```
 cd navit-build
@@ -121,7 +127,7 @@ Then run Navit
 You should see the map of Munich.  Press anywhere on the map and then
 press on the quite button.
 
-### Supply a map
+#### Supply a map
 
 Depending on the size of the map you want, you may need to perform
 that operation on a bigger machine than a Raspberry Pi.  I provide
@@ -169,9 +175,23 @@ Then, still from within the folder you've launched Navit from, open
 emacs navit.xml
 ```
 
+##### Fullscreen
+
+To have Navit start in fullscreen, search the line
+
+```
+		<gui type="internal" enabled="yes"><![CDATA[
+```
+
+and replace it by
+
+```
+		<gui type="internal" enabled="yes" fullscreen="1"><![CDATA[
+```
+
 ##### Point to the supplied map
 
-Search for the string `binfile`, you should be to a line like
+Search the string `binfile`, you should be to a line like
 
 ```
 		<!-- Mapset template for OpenStreetMap -->
@@ -210,3 +230,9 @@ opposite directions.
 In order to have navit launched at start-up
 
 ## Usage
+
+## Acknowledgement
+
+This document has been greatly facilitated by
+
+https://ozzmaker.com/navigating-navit-raspberry-pi/
