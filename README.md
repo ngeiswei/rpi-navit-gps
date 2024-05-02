@@ -10,6 +10,7 @@ Description of my personal attempt to build a Raspberry Pi Navit GPS.
 
 - Raspberry Pi 3 Model B Rev 1.2
 - 5" DSI LCD Touch Screen Display Kit.
+- SIM7600X 4G HAT
 
 ### Software
 
@@ -35,6 +36,10 @@ Insert the microSD card into its slot.
 Mount the 5" DSI LCD Touch Screen Display Kit onto the Raspberry Pi
 and connect the touch screen via the Display Port.
 
+### Install SIM7600X 4G HAT
+
+TODO
+
 ## Assemble Software
 
 ### Boot-up Raspberry Pi
@@ -45,9 +50,91 @@ and connect the touch screen via the Display Port.
    assume that the user name is `gps`.
 4. Open a terminal to install the rest of the needed software.
 
+### Configure SIM7600X 4G HAT
+
+First, enable the serial port.  Launch the Raspberry Pi configuration
+tool
+
+```
+sudo raspi-config
+```
+
+Select `Interface Option`, then `Serial Port`.  To the question
+
+```
+Would you like a login shell to be accessible over serial?
+```
+
+answer `No`.
+
+Then, to the question
+
+```
+Would you like the serial port hardware to be enabled?
+```
+
+answer `Yes`.
+
+Then select `Ok` and reboot.
+
+### Install Minicom
+
+To access the GPS sensor we must install `minicom`
+
+```
+sudo apt install minicom
+```
+
+### Test the SIM7600X 4G HAT
+
+Launch minicom
+
+```
+minicom -D /dev/ttyS0
+```
+
+Inside minicom, enter
+
+```
+AT+CGPS=1,1
+```
+
+which should output
+
+```
+OK
+```
+
+Then, enter
+
+```
+AT+CGPSINFO
+```
+
+which should output
+
+```
+`````````
+```
+
+Wait for 5 minutes, which should be enough time for your device to be
+localized, and enter again
+
+```
+AT+CGPSINFO
+```
+
+which should output GPS coordonates in NMEA format
+
+```
++CGPSINFO: 1234.123456,N,1245.123456,E,123456,123456.1,12.1,1,1,123,1
+```
+
+Exit minicom with Ctrl-A, then Z, and then X.
+
 ### Install Navit
 
-Debian packages of Navit are sometimes deficient, I recommend you
+The debian packages of Navit is sometime insufficient, I recommend you
 compile it from source.
 
 #### Install Prerequisites
