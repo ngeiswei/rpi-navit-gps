@@ -320,6 +320,8 @@ In order to have navit launched at start-up
 
 ## Acknowledgement
 
-This document has been greatly facilitated by
+This document is based on the following resources
 
 https://ozzmaker.com/navigating-navit-raspberry-pi/
+https://www.waveshare.com/wiki/SIM7600X_4G_HAT_Guides_for_Pi
+https://core-electronics.com.au/guides/raspberry-pi-4g-gps-hat/
