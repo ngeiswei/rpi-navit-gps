@@ -93,7 +93,7 @@ Launch minicom
 minicom -D /dev/ttyS0
 ```
 
-Inside minicom, enter
+Inside minicom, enter the following command to active the GPS
 
 ```
 AT+CGPS=1,1
@@ -128,6 +128,19 @@ which should output GPS coordonates in NMEA format
 
 ```
 +CGPSINFO: 1234.123456,N,1245.123456,E,123456,123456.1,12.1,1,1,123,1
+```
+
+Deactivate the GPS
+
+```
+AT+CGPS=0
+```
+
+which should output
+
+```
+OK
+AT+CGPS=0
 ```
 
 Exit minicom with Ctrl-A, then Z, and then X.
