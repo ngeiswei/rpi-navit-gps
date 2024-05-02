@@ -114,7 +114,7 @@ AT+CGPSINFO
 which should output
 
 ```
-`````````
+TODO
 ```
 
 Wait for 5 minutes, which should be enough time for your device to be
