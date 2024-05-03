@@ -1,0 +1,1 @@
+send AT+CGPSINFOCFG=1,31
