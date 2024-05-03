@@ -227,21 +227,6 @@ minicom
 and see that it outputs a stream of GPS coordinates (unless you have
 restarted the Raspberry Pi since you entered `AT+CGPSINFOCFG=1,31`).
 
-#### Launch minicom at start-up
-
-Edit your `.bashrc` (should be at the root of your home directory) by
-adding the following lines
-
-```
-# Start minicom GPS
-cd /path/to/this/repo
-./start-gps.sh
-cd -
-```
-
-replacing `/path/to/this/repo` by the appropriate path, which is
-probably `~/rpi-navit-gps` in your case.
-
 ### Install Navit
 
 The debian packages of Navit is sometime insufficient, I recommend you
@@ -409,6 +394,10 @@ and `y=0`.  Incrementing `x` moves the button right while incrementing
 `y` moves it down.  If negative values are used then it is as if the
 origin was the bottom right corner and `x` and `y` move in the
 opposite directions.
+
+##### Point to the GPS
+
+TODO: pipe
 
 ### Configure the Raspberry Pi
 
