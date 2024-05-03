@@ -50,6 +50,20 @@ TODO
    assume that the user name is `gps`.
 4. Open a terminal to install the rest of the needed software.
 
+### Install Building Tools
+
+```
+sudo apt install git cmake g++ gettext protobuf-c-compiler
+```
+
+### Clone this Repository
+
+Clone this repository into our Raspberry Pi
+
+```
+git clone https://github.com/ngeiswei/rpi-navit-gps.git
+```
+
 ### Configure SIM7600X 4G HAT
 
 First, enable the serial port.  Launch the Raspberry Pi configuration
@@ -220,10 +234,13 @@ adding the following lines
 
 ```
 # Start minicom GPS
-/path/to/this/repo/start-gps.sh
+cd /path/to/this/repo
+./start-gps.sh
+cd -
 ```
 
-replacing `/path/to/this/repo` appropriately.
+replacing `/path/to/this/repo` by the appropriate path, which is
+probably `~/rpi-navit-gps` in your case.
 
 ### Install Navit
 
@@ -234,25 +251,13 @@ compile it from source.
 
 From the terminal, install the following packages.
 
-1. Building tools
-
-```
-sudo apt install git cmake g++ gettext protobuf-c-compiler
-```
-
-2. GPS software
-
-```
-sudo apt install gpsd gpsd-clients
-```
-
-3. Additional libraries
-
 ```
 sudo apt install libpng-dev libgtk2.0-dev librsvg2-bin \
                  libgps-dev libdbus-glib-1-dev freeglut3-dev \
                  libfreeimage-dev libprotobuf-c-dev zlib1g-dev \
 ```
+
+(Note to self: maybe `gpsd` and `gpsd-clients` need to be installed).
 
 #### Build Navit
 
