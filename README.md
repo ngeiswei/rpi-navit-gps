@@ -105,6 +105,20 @@ which should output
 OK
 ```
 
+Check that the GPS is activated which the command
+
+```
+AT+CGPS?
+```
+
+which should return
+
+```
++CGPS: 1,1
+
+OK
+```
+
 Then, enter
 
 ```
@@ -114,17 +128,17 @@ AT+CGPSINFO
 which should output
 
 ```
-TODO
+,,,,,,
 ```
 
-Wait for 5 minutes, which should be enough time for your device to be
+Wait for 5 minutes, which should be enough time for your device to get
 localized, and enter again
 
 ```
 AT+CGPSINFO
 ```
 
-which should output GPS coordonates in NMEA format
+which should now output GPS coordonates in NMEA format
 
 ```
 +CGPSINFO: 1234.123456,N,1245.123456,E,123456,123456.1,12.1,1,1,123,1
@@ -144,6 +158,72 @@ AT+CGPS=0
 ```
 
 Exit minicom with Ctrl-A, then Z, and then X.
+
+### Configure the SIM7600X 4G HAT
+
+#### Automatically Activate the GPS
+
+Launch minicom once again
+
+```
+minicom -D /dev/ttyS0
+```
+
+type the commands
+
+```
+AT+CGPSAUTO=1
+AT+CGPSINFOCFG=1,31
+```
+
+The latter instructs the GPS to output coordinates in NMEA format
+every second, which you see on your terminal screen.
+
+Now, without exiting minicom, open another terminal and type
+
+```
+cat /dev/ttyS0
+```
+
+which should also output a stream of GPS coordinates.
+
+You can exist minicom and see that the stream of GPS coordinates stops
+being output from `cat /dev/ttyS0`.  If you still see a stream of data
+coming out of `cat /dev/ttyS0`, but no GPS coordinates, it is normal.
+
+#### Configure minicom
+
+Let us configure minicom to use `/dev/ttyS0` by default, enter
+
+```
+sudo minicom -s
+```
+
+Select the `Serial port setup` option.  Type `A` and set the field
+`A - Serial device` to `/dev/ttyS0`.  Press enter twice to go back to
+the menu and select `Save setup as dfl`.  You can now exit by
+selecting `Exit from Minicom`.
+
+You may launch minicom once again
+
+```
+minicom
+```
+
+and see that it outputs a stream of GPS coordinates (unless you have
+restarted the Raspberry Pi since you entered `AT+CGPSINFOCFG=1,31`).
+
+#### Launch minicom at start-up
+
+Edit your `.bashrc` (should be at the root of your home directory) by
+adding the following lines
+
+```
+# Start minicom GPS
+/path/to/this/repo/start-gps.sh
+```
+
+replacing `/path/to/this/repo` appropriately.
 
 ### Install Navit
 
@@ -338,3 +418,4 @@ This document is based on the following resources
 https://ozzmaker.com/navigating-navit-raspberry-pi/
 https://www.waveshare.com/wiki/SIM7600X_4G_HAT_Guides_for_Pi
 https://core-electronics.com.au/guides/raspberry-pi-4g-gps-hat/
+https://dev.to/nakullukan/raspberrypi-sim7600-gpsd-2969
