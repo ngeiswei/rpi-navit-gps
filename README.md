@@ -294,7 +294,7 @@ rather create a `navit-build` folder next to it
 mkdir navit-build
 ```
 
-Enter this folder
+Enter that folder
 
 ```bash
 cd navit-build
@@ -304,7 +304,7 @@ and compile
 
 ```bash
 cmake ../navit-0.5.6
-make
+make -j
 ```
 
 #### Test Navit
@@ -327,7 +327,7 @@ press on the quite button.
 
 #### Create GPS FIFO
 
-Create a FIFO for Navit to receive GPS data
+Create a FIFO to receive GPS data
 
 ```bash
 mkfifo ~/Navit/gps0
@@ -374,8 +374,7 @@ editor of your choice, mine is Emacs
 sudo apt install emacs
 ```
 
-Then, still from within the folder you've launched Navit from, open
-`navit.xml`
+Then, still from within `~/Navit/navit-build/navit`, open `navit.xml`
 
 ```bash
 emacs navit.xml
@@ -442,7 +441,7 @@ Look for
 and replace it by
 
 ```xml
-		<vehicle name="Local GPS" profilename="car" enabled="yes" active="1" source="pipe:gps0" follow="2">
+		<vehicle name="Local GPS" profilename="car" enabled="yes" active="1" source="pipe:/home/gps/Navit/gps0" follow="2">
 ```
 
 ##### Enable Speech
@@ -482,14 +481,24 @@ replace by
 Then, under that line add the following lines
 
 ```xml
+		<!-- Distance to Next Maneouvre -->
+		<osd enabled="yes" type="text" label="${navigation.item[1].length[named]}" x="0" y="0" font_size="350" w="75" h="30" align="0" background_color="#000000c8" osd_configuration="2" />
+		<!-- Next Road -->
+		<osd enabled="yes" type="text" label="   ${navigation.item[1].street_name} ${navigation.item[1].street_name_systematic}" x="75" y="0" font_size="450" w="824" h="40" align="4" background_color="#000000c8" osd_configuration="2" />
 		<!-- Route Distance -->
 		<osd enabled="yes" type="text" label="DTG ${navigation.item.destination_length[named]}" w="125" h="20"  x="-125" y="0"  font_size="300" align="8" background_color="#000000c8" osd_configuration="2" />
 		<!-- Arrival Time -->
 		<osd enabled="yes" type="text" label="ETA ${navigation.item.destination_time[arrival]}" x="-125" y="20"  font_size="300" w="125" h="20" align="8" background_color="#000000c8" osd_configuration="2" />
+		<!-- Current Altitude -->
+		<osd enabled="yes" type="text" label="${vehicle.position_height}" x="0" y="-20"  font_size="300" w="60" h="20" align="4" background_color="#000000c8"/>
 		<!-- Current Direction -->
 		<osd enabled="yes" type="text" label="ALT" x="0" y="-40"  font_size="200" w="60" h="20" align="4" background_color="#000000c8"/>
 		<!-- Current Street -->
 		<osd enabled="yes" type="text" label="${tracking.item.street_name} ${tracking.item.street_name_systematic}" x="60" y="-40"  font_size="500" w="764" h="40" align="4" background_color="#000000c8"/>
+		<!-- Speed Warner -->
+		<osd enabled="yes" type="speed_warner" w="100" h="40" x="-300" y="-40" font_size="500" speed_exceed_limit_offset="15" speed_exceed_limit_percent="10" announce_on="1" background_color="#00000000" label="text_only" align="8"/>
+		<!-- Current Speed -->
+		<osd enabled="yes" type="text" label="${vehicle.position_speed}" x="-200" y="-40" font_size="500" w="150" h="40" align="0" background_color="#000000c8"/>
 		<!-- GPS Status -->
 		<osd enabled="yes" type="gps_status" x="-50" y="-40" w="50" h="40" background_color="#000000c8"/>
 ```
