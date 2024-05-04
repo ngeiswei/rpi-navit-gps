@@ -62,6 +62,21 @@ size, ~15mm).
 sudo apt install git cmake g++ gettext protobuf-c-compiler
 ```
 
+### Create Navit Folder
+
+Let us create a folder where we will place all the tools, including
+navit itself
+
+```
+mkdir ~/Navit
+```
+
+Enter that folder
+
+```
+cd ~/Navit
+```
+
 ### Clone this Repository
 
 Clone this repository into our Raspberry Pi
@@ -259,7 +274,8 @@ sudo apt install espeak festival festvox-us-slt-hts
 #### Build Navit
 
 Do not use the latest revision from the git repository, it might be
-broken.  Instead, fetch the latest release, 0.5.6 as of April 2024
+broken.  Instead, from the `~/Navit` folder, fetch the latest release,
+0.5.6 as of April 2024
 
 ```bash
 wget https://github.com/navit-gps/navit/archive/refs/tags/v0.5.6.tar.gz
@@ -287,7 +303,7 @@ cd navit-build
 and compile
 
 ```bash
-cmake ~/navit-0.5.6
+cmake ../navit-0.5.6
 make
 ```
 
@@ -311,11 +327,10 @@ press on the quite button.
 
 #### Create GPS FIFO
 
-Still under `~/navit-build/navit` create a FIFO for Navit to receive
-GPS data
+Create a FIFO for Navit to receive GPS data
 
 ```bash
-mkfifo gps0
+mkfifo ~/Navit/gps0
 ```
 
 #### Supply a map
@@ -347,7 +362,7 @@ this may take a while.  Then copy the bin file to your raspberry pi,
 under the folder
 
 ```bash
-~/navit-build/navit/maps
+~/Navit/navit-build/navit/maps
 ```
 
 #### Configure Navit
@@ -464,7 +479,7 @@ replace by
 		<osd enabled="yes" type="navigation_next_turn"/>
 ```
 
-Then, under it add the following
+Then, under that line add the following lines
 
 ```xml
 		<!-- Route Distance -->
@@ -481,16 +496,15 @@ Then, under it add the following
 
 ### Configure the Raspberry Pi
 
-Copy the script `launch-navit.sh` to the user root folder
+We provide a script, `launch-navit.sh`, that launches minicom,
+redirects the GPS data to the `gps0` FIFO and launches Navit.  Copy
+that script under `~/Navit`
 
 ```
-cp launch-navit.sh ~
+cp ~/Navit/rpi-navit-gps/launch-navit.sh ~/Navit
 ```
 
-That script will launch minicom, redirect the GPS data to the `gps0`
-FIFO and launch navit.
-
-You may choose to run that script at start-up TODO.
+To launch that script at start-up TODO.
 
 ## Acknowledgement
 
