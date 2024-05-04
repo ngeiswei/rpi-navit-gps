@@ -38,7 +38,13 @@ and connect the touch screen via the Display Port.
 
 ### Install SIM7600X 4G HAT
 
-TODO
+Connect the SIM7600X to the Raspberry Pi via the GPIO interface.  To
+my experience, if all you use is the GPS then you do not need to plug
+the USB cable.
+
+In order to hold the SIM7600X firmly you can use motherboard standoffs
+between the Raspberry Pi and the SIM7600X. (TODO: determine precise
+size, ~15mm).
 
 ## Assemble Software
 
@@ -52,7 +58,7 @@ TODO
 
 ### Install Building Tools
 
-```
+```bash
 sudo apt install git cmake g++ gettext protobuf-c-compiler
 ```
 
@@ -60,7 +66,7 @@ sudo apt install git cmake g++ gettext protobuf-c-compiler
 
 Clone this repository into our Raspberry Pi
 
-```
+```bash
 git clone https://github.com/ngeiswei/rpi-navit-gps.git
 ```
 
@@ -69,7 +75,7 @@ git clone https://github.com/ngeiswei/rpi-navit-gps.git
 First, enable the serial port.  Launch the Raspberry Pi configuration
 tool
 
-```
+```bash
 sudo raspi-config
 ```
 
@@ -95,7 +101,7 @@ Then select `Ok` and reboot.
 
 To access the GPS sensor we must install `minicom`
 
-```
+```bash
 sudo apt install minicom
 ```
 
@@ -103,7 +109,7 @@ sudo apt install minicom
 
 Launch minicom
 
-```
+```bash
 minicom -D /dev/ttyS0
 ```
 
@@ -152,7 +158,7 @@ localized, and enter again
 AT+CGPSINFO
 ```
 
-which should now output GPS coordonates in NMEA format
+which should now output GPS coordonates
 
 ```
 +CGPSINFO: 1234.123456,N,1245.123456,E,123456,123456.1,12.1,1,1,123,1
@@ -179,7 +185,7 @@ Exit minicom with Ctrl-A, then Z, and then X.
 
 Launch minicom once again
 
-```
+```bash
 minicom -D /dev/ttyS0
 ```
 
@@ -195,7 +201,7 @@ every second, which you see on your terminal screen.
 
 Now, without exiting minicom, open another terminal and type
 
-```
+```bash
 cat /dev/ttyS0
 ```
 
@@ -209,7 +215,7 @@ coming out of `cat /dev/ttyS0`, but no GPS coordinates, it is normal.
 
 Let us configure minicom to use `/dev/ttyS0` by default, enter
 
-```
+```bash
 sudo minicom -s
 ```
 
@@ -220,7 +226,7 @@ selecting `Exit from Minicom`.
 
 You may launch minicom once again
 
-```
+```bash
 minicom
 ```
 
@@ -236,10 +242,16 @@ compile it from source.
 
 From the terminal, install the following packages.
 
-```
+```bash
 sudo apt install libpng-dev libgtk2.0-dev librsvg2-bin \
                  libgps-dev libdbus-glib-1-dev freeglut3-dev \
                  libfreeimage-dev libprotobuf-c-dev zlib1g-dev \
+```
+
+Install speech synthesizers
+
+```bash
+sudo apt install espeak festival festvox-us-slt-hts
 ```
 
 (Note to self: maybe `gpsd` and `gpsd-clients` need to be installed).
@@ -249,32 +261,32 @@ sudo apt install libpng-dev libgtk2.0-dev librsvg2-bin \
 Do not use the latest revision from the git repository, it might be
 broken.  Instead, fetch the latest release, 0.5.6 as of April 2024
 
-```
+```bash
 wget https://github.com/navit-gps/navit/archive/refs/tags/v0.5.6.tar.gz
 ```
 
 Unpack
 
-```
+```bash
 tar xvf v0.5.6.tar.gz
 ```
 
 It should create a `navit-0.5.6` folder, do not enter that folder,
 rather create a `navit-build` folder next to it
 
-```
+```bash
 mkdir navit-build
 ```
 
 Enter this folder
 
-```
+```bash
 cd navit-build
 ```
 
 and compile
 
-```
+```bash
 cmake ~/navit-0.5.6
 make
 ```
@@ -284,48 +296,57 @@ make
 First, let's make sure that Navit works.  Go to the folder containing
 the Navit excecutable
 
-```
+```bash
 cd navit
 ```
 
 Then run Navit
 
-```
+```bash
 ./navit
 ```
 
 You should see the map of Munich.  Press anywhere on the map and then
 press on the quite button.
 
+#### Create GPS FIFO
+
+Still under `~/navit-build/navit` create a FIFO for Navit to receive
+GPS data
+
+```bash
+mkfifo gps0
+```
+
 #### Supply a map
 
-Depending on the size of the map you want, you may need to perform
-that operation on a bigger machine than a Raspberry Pi.  I provide
-here the instructions for the map of Europe which is too big to be
-compiled on the Raspberry Pi.
+Depending on the size of the map you may need to perform that
+operation on a bigger machine than a Raspberry Pi.  I provide here the
+instructions for the map of Europe which is too big to be compiled on
+the Raspberry Pi.
 
 Go to your desktop, install `maptool`
 
-```
+```bash
 sudo apt install maptool
 ```
 
 Download the map of your choice (here Europe)
 
-```
+```bash
 wget -c https://download.geofabrik.de/europe-latest.osm.pbf
 ```
 
 Compile it
 
-```
+```bash
 maptool --threads=4 --protobuf -i europe-latest.osm.pbf osm_europe.bin
 ```
 
 this may take a while.  Then copy the bin file to your raspberry pi,
 under the folder
 
-```
+```bash
 ~/navit-build/navit/maps
 ```
 
@@ -334,36 +355,36 @@ under the folder
 Now let's configure Navit.  You need to edit `navit.xml` with the
 editor of your choice, mine is Emacs
 
-```
+```bash
 sudo apt install emacs
 ```
 
 Then, still from within the folder you've launched Navit from, open
 `navit.xml`
 
-```
+```bash
 emacs navit.xml
 ```
 
 ##### Fullscreen
 
-To have Navit start in fullscreen, search the line
+To have Navit start in fullscreen, look for
 
-```
+```xml
 		<gui type="internal" enabled="yes"><![CDATA[
 ```
 
 and replace it by
 
-```
+```xml
 		<gui type="internal" enabled="yes" fullscreen="1"><![CDATA[
 ```
 
 ##### Point to the supplied map
 
-Search the string `binfile`, you should be to a line like
+Look for the string `binfile`, it should be inside a line like
 
-```
+```xml
 		<!-- Mapset template for OpenStreetMap -->
 		<mapset enabled="no">
 			<map type="binfile" enabled="yes" data="/media/mmc2/MapsNavit/osm_europe.bin"/>
@@ -380,9 +401,9 @@ is not an OpenStreetMap template.
 
 ##### Add zoom in/out buttons
 
-Search the lines
+Look for the lines
 
-```
+```xml
 		<osd enabled="no" type="button" x="-96" y="-96" command="zoom_in()" src="zoom_in.png"/>
 		<osd enabled="no" type="button" x="0" y="-96" command="zoom_out()" src="zoom_out.png"/>
 ```
@@ -397,13 +418,79 @@ opposite directions.
 
 ##### Point to the GPS
 
-TODO: pipe
+Look for
+
+```xml
+		<vehicle name="Local GPS" profilename="car" enabled="yes" active="1" source="gpsd://localhost" gpsd_query="w+xj">
+```
+
+and replace it by
+
+```xml
+		<vehicle name="Local GPS" profilename="car" enabled="yes" active="1" source="pipe:gps0" follow="2">
+```
+
+##### Enable Speech
+
+Look for
+
+```xml
+		<speech type="cmdline" data="echo 'Fix the speech tag in navit.xml to let navit say:' '%s'" cps="15"/>
+```
+
+For a male robotic voice, replace it by
+
+```xml
+		<speech type="cmdline" data="espeak '%s'" cps="15"/>
+```
+
+For a female natural voice, replace it by
+
+```xml
+		<speech type="cmdline" data="festival -b '(voice_cmu_us_slt_arctic_hts)' '(SayText '%s')'" cps="15"/>
+```
+
+##### Add Layers
+
+Look for
+
+```xml
+		<osd enabled="no" type="navigation_next_turn"/>
+```
+
+replace by
+
+```xml
+		<osd enabled="yes" type="navigation_next_turn"/>
+```
+
+Then, under it add the following
+
+```xml
+		<!-- Route Distance -->
+		<osd enabled="yes" type="text" label="DTG ${navigation.item.destination_length[named]}" w="125" h="20"  x="-125" y="0"  font_size="300" align="8" background_color="#000000c8" osd_configuration="2" />
+		<!-- Arrival Time -->
+		<osd enabled="yes" type="text" label="ETA ${navigation.item.destination_time[arrival]}" x="-125" y="20"  font_size="300" w="125" h="20" align="8" background_color="#000000c8" osd_configuration="2" />
+		<!-- Current Direction -->
+		<osd enabled="yes" type="text" label="ALT" x="0" y="-40"  font_size="200" w="60" h="20" align="4" background_color="#000000c8"/>
+		<!-- Current Street -->
+		<osd enabled="yes" type="text" label="${tracking.item.street_name} ${tracking.item.street_name_systematic}" x="60" y="-40"  font_size="500" w="764" h="40" align="4" background_color="#000000c8"/>
+		<!-- GPS Status -->
+		<osd enabled="yes" type="gps_status" x="-50" y="-40" w="50" h="40" background_color="#000000c8"/>
+```
 
 ### Configure the Raspberry Pi
 
-In order to have navit launched at start-up
+Copy the script `launch-navit.sh` to the user root folder
 
-## Usage
+```
+cp launch-navit.sh ~
+```
+
+That script will launch minicom, redirect the GPS data to the `gps0`
+FIFO and launch navit.
+
+You may choose to run that script at start-up TODO.
 
 ## Acknowledgement
 
