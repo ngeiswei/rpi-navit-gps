@@ -407,7 +407,7 @@ Look for the string `binfile`, it should be inside a line like
 
 Replace `enabled="no"` by `enabled="yes"` and
 `data="/media/mmc2/MapsNavit/osm_europe.bin"` by
-`data="/home/gps/navit-build/maps/osm_europe.bin"`.
+`data="/home/gps/Navit/navit-build/navit/maps/osm_europe.bin"`.
 
 You may want to disable any other mapset templates, so search for
 `mapset enabled="yes"` and replaced it by `mapset enabled="no"` if it
@@ -441,7 +441,7 @@ Look for
 and replace it by
 
 ```xml
-		<vehicle name="Local GPS" profilename="car" enabled="yes" active="1" source="pipe:/home/gps/Navit/gps0" follow="2">
+		<vehicle name="Local GPS" profilename="car" enabled="yes" active="1" source="file:/home/gps/Navit/gps0" follow="2">
 ```
 
 ##### Enable Speech
@@ -507,10 +507,10 @@ Then, under that line add the following lines
 
 We provide a script, `launch-navit.sh`, that launches minicom,
 redirects the GPS data to the `gps0` FIFO and launches Navit.  Copy
-that script under `~/Navit`
+the following files under `~/Navit`
 
 ```
-cp ~/Navit/rpi-navit-gps/launch-navit.sh ~/Navit
+cp ~/Navit/rpi-navit-gps/{launch-navit.sh,start-gps.minicom} ~/Navit
 ```
 
 To launch that script at start-up TODO.
