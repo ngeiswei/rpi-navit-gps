@@ -1,8 +1,9 @@
 #!/bin/bash
 PREV_DIR=$(pwd)
-cd ~/Navit/rpi-navit-gps
-minicom -S start-gps.minicom > ~/Navit/gps0 &
-cd ~/Navit/navit-build/navit
+cd ~/Navit
+minicom -S start-gps.minicom | grep '\$' | sed 's/^[^$]\+//g' > gps0 &
+sleep 5
+cd navit-build/navit
 ./navit
-killall minicom
+killall -9 minicom
 cd "$PREV_DIR"
