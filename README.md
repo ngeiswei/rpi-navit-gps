@@ -422,8 +422,14 @@ Look for the lines
 		<osd enabled="no" type="button" x="0" y="-96" command="zoom_out()" src="zoom_out.png"/>
 ```
 
-and replace `enabled="no"` by `enabled="yes"` in both lines.  Feel
-free to reposition the buttons to your liking.  The `x` and `y`
+and replace them by
+
+```xml
+		<osd enabled="yes" type="button" x="-96" y="96" command="zoom_in()" src="zoom_in.png"/>
+		<osd enabled="yes" type="button" x="-96" y="192" command="zoom_out()" src="zoom_out.png"/>
+```
+
+Feel free to reposition the buttons to your liking.  The `x` and `y`
 coordinates are in pixel.  The top left corner corresponds to `x=0`
 and `y=0`.  Incrementing `x` moves the button right while incrementing
 `y` moves it down.  If negative values are used then it is as if the
@@ -441,7 +447,7 @@ Look for
 and replace it by
 
 ```xml
-		<vehicle name="Local GPS" profilename="car" enabled="yes" active="1" source="file:/home/gps/Navit/gps0" follow="2">
+		<vehicle name="Local GPS" profilename="car" enabled="yes" active="1" source="file://home/gps/Navit/gps0" follow="5">
 ```
 
 ##### Enable Speech
