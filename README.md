@@ -509,6 +509,16 @@ Then, under that line add the following lines
 		<osd enabled="yes" type="gps_status" x="-50" y="-40" w="50" h="40" background_color="#000000c8"/>
 ```
 
+##### Remove Nigh Mode
+
+If you do not wish to use night mode, you can disable it by removing
+
+```
+nightlayout="Car-dark"
+```
+
+from `navit_layout_car.xml` (same folder as `navit.xml`).
+
 ### Configure the Raspberry Pi
 
 We provide a script, `launch-navit.sh`, that launches minicom,
