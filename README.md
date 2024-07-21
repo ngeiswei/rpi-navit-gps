@@ -273,6 +273,8 @@ sudo apt install espeak festival festvox-us-slt-hts
 
 #### Build Navit
 
+##### Get Navit
+
 Do not use the latest revision from the git repository, it might be
 broken.  Instead, from the `~/Navit` folder, fetch the latest release,
 0.5.6 as of April 2024
@@ -287,8 +289,41 @@ Unpack
 tar xvf v0.5.6.tar.gz
 ```
 
-It should create a `navit-0.5.6` folder, do not enter that folder,
-rather create a `navit-build` folder next to it
+It should create a `navit-0.5.6` folder.
+
+##### Patch Navit
+
+Before compiling Navit, you may modify the source code.
+
+###### Default Country
+
+One thing that I would like to change is the default country when
+entering an address.  By default Navit uses the local environemnt, in
+particular the variable `LANG` to determine the default country.  My
+variable `LANG` does not agree with my residential country.  To
+correct that, edit the file `navit-0.5.6/navit/navit/country.c`.  Look
+for the function `country_default(void)`, and inside that function
+replace
+
+```C
+strncpy(iso2, lang+3, 2);
+```
+
+by
+
+```C
+strncpy(iso2, "AD", 2);
+```
+
+replacing `"AD"` (the country code of Andorra) by your country code.
+If you are not sure what is your country code you may look at the
+country struct in that same file (search `struct country`).
+
+##### Compile Navit
+
+Now that Navit is the way you like, you may compile it.  First, create
+a folder, `navit-build`, to compile it.  Make sure you are under
+`~/Navit`, create the folder
 
 ```bash
 mkdir navit-build
