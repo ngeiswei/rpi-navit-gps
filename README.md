@@ -429,7 +429,7 @@ and replace it by
 		<gui type="internal" enabled="yes" fullscreen="1"><![CDATA[
 ```
 
-##### Point to the supplied map
+##### Set the map
 
 Look for the string `binfile`, it should be inside a line like
 
@@ -460,8 +460,8 @@ Look for the lines
 and replace them by
 
 ```xml
-		<osd enabled="yes" type="button" x="-96" y="96" command="zoom_in()" src="zoom_in.png"/>
-		<osd enabled="yes" type="button" x="-96" y="192" command="zoom_out()" src="zoom_out.png"/>
+		<osd enabled="yes" type="button" x="-80" y="64" command="zoom_in()" src="zoom_in.png"/>
+		<osd enabled="yes" type="button" x="-80" y="144" command="zoom_out()" src="zoom_out.png"/>
 ```
 
 Feel free to reposition the buttons to your liking.  The `x` and `y`
@@ -507,42 +507,45 @@ For a female natural voice, replace it by
 
 ##### Add Layers
 
-Look for
+##### Compass
+
+Look for `<osd enabled="yes" type="compass"` and set it as follows
 
 ```xml
-		<osd enabled="no" type="navigation_next_turn"/>
+		<osd enabled="yes" type="compass" x="32" y="64"/>
 ```
+
+##### Icon of next turn
+
+Look for `<osd enabled="no" type="navigation_next_turn"/>` and set it
+as follows
 
 replace by
 
 ```xml
-		<osd enabled="yes" type="navigation_next_turn"/>
+		<osd enabled="yes" type="navigation_next_turn" x="32" y="-96"/>
 ```
 
-Then, under that line add the following lines
+##### Distance to Next Maneouvre
+
+Add the following
 
 ```xml
 		<!-- Distance to Next Maneouvre -->
-		<osd enabled="yes" type="text" label="${navigation.item[1].length[named]}" x="0" y="0" font_size="350" w="75" h="30" align="0" background_color="#000000c8" osd_configuration="2" />
-		<!-- Next Road -->
-		<osd enabled="yes" type="text" label="   ${navigation.item[1].street_name} ${navigation.item[1].street_name_systematic}" x="75" y="0" font_size="450" w="824" h="40" align="4" background_color="#000000c8" osd_configuration="2" />
-		<!-- Route Distance -->
-		<osd enabled="yes" type="text" label="DTG ${navigation.item.destination_length[named]}" w="125" h="20"  x="-125" y="0"  font_size="300" align="8" background_color="#000000c8" osd_configuration="2" />
-		<!-- Arrival Time -->
-		<osd enabled="yes" type="text" label="ETA ${navigation.item.destination_time[arrival]}" x="-125" y="20"  font_size="300" w="125" h="20" align="8" background_color="#000000c8" osd_configuration="2" />
-		<!-- Current Altitude -->
-		<osd enabled="yes" type="text" label="${vehicle.position_height}" x="0" y="-20"  font_size="300" w="60" h="20" align="4" background_color="#000000c8"/>
-		<!-- Current Direction -->
-		<osd enabled="yes" type="text" label="ALT" x="0" y="-40"  font_size="200" w="60" h="20" align="4" background_color="#000000c8"/>
-		<!-- Current Street -->
-		<osd enabled="yes" type="text" label="${tracking.item.street_name} ${tracking.item.street_name_systematic}" x="60" y="-40"  font_size="500" w="764" h="40" align="4" background_color="#000000c8"/>
-		<!-- Speed Warner -->
-		<osd enabled="yes" type="speed_warner" w="100" h="40" x="-300" y="-40" font_size="500" speed_exceed_limit_offset="15" speed_exceed_limit_percent="10" announce_on="1" background_color="#00000000" label="text_only" align="8"/>
-		<!-- Current Speed -->
-		<osd enabled="yes" type="text" label="${vehicle.position_speed}" x="-200" y="-40" font_size="500" w="150" h="40" align="0" background_color="#000000c8"/>
-		<!-- GPS Status -->
-		<osd enabled="yes" type="gps_status" x="-50" y="-40" w="50" h="40" background_color="#000000c8"/>
+		<osd enabled="yes" type="text" label="${navigation.item[1].length[named]}" x="0" y="0" font_size="550" w="200" h="32" align="0" background_color="#000000c8" osd_configuration="2" />
 ```
+
+##### Next Road
+
+```xml
+		<!-- Next Road -->
+		<osd enabled="yes" type="text" label="   ${navigation.item[1].street_name} ${navigation.item[1].street_name_systematic}" x="200" y="0" font_size="550" w="400" h="32" align="4" background_color="#000000c8" osd_configuration="2" />
+```
+
+##### Route Distance
+
+		<!-- Route Distance -->
+		<osd enabled="yes" type="text" label="${navigation.item.destination_length[named]}" w="200" h="32"  x="-200" y="0"  font_size="550" align="8" background_color="#000000c8" osd_configuration="2" />
 
 ##### Remove Nigh Mode
 
@@ -568,7 +571,7 @@ To launch that script at start-up TODO.
 
 ## Acknowledgement
 
-This document is based on the following resources
+This document has been helped by the following resources
 
 https://ozzmaker.com/navigating-navit-raspberry-pi/
 https://www.waveshare.com/wiki/SIM7600X_4G_HAT_Guides_for_Pi
